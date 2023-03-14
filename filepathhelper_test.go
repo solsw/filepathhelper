@@ -63,7 +63,7 @@ func TestChangeExt(t *testing.T) {
 	}
 }
 
-func TestSplitFilePath(t *testing.T) {
+func TestSplit(t *testing.T) {
 	type args struct {
 		p string
 	}
@@ -81,8 +81,8 @@ func TestSplitFilePath(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SplitFilePath(tt.args.p); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SplitFilePath() = %v, want %v", got, tt.want)
+			if got := Split(tt.args.p); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Split() = %v, want %v", got, tt.want)
 			}
 		})
 	}

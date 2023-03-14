@@ -1,4 +1,3 @@
-// Package filepathhelper contains 'filepath' package helpers.
 package filepathhelper
 
 import (
@@ -32,14 +31,14 @@ func ChangeExt(path, ext string) string {
 	return NoExt(path) + "." + ext
 }
 
-// SplitFilePath splits 'path' (using filepath.Separator as separator)
+// Split splits 'path' (using [filepath.Separator] as separator)
 // into slice of strings containing directory names and filename.
 // (E.g. on Windows "a\b\c.d" is splitted into {"a", "b", "c.d"} slice.)
-func SplitFilePath(path string) []string {
-	return pathhelper.SplitPath(filepath.ToSlash(path))
+func Split(path string) []string {
+	return pathhelper.Split(filepath.ToSlash(path))
 }
 
-// StartSeparator returns 'path' guaranteed to start with filepath.Separator.
+// StartSeparator returns 'path' guaranteed to start with [filepath.Separator].
 // If 'path' is empty, empty string is returned.
 func StartSeparator(path string) string {
 	if path == "" {
@@ -51,7 +50,7 @@ func StartSeparator(path string) string {
 	return string(filepath.Separator) + path
 }
 
-// EndSeparator returns 'path' guaranteed to end with filepath.Separator.
+// EndSeparator returns 'path' guaranteed to end with [filepath.Separator].
 // If 'path' is empty, empty string is returned.
 func EndSeparator(path string) string {
 	if path == "" {
