@@ -1,10 +1,22 @@
 package filepathhelper
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/solsw/pathhelper"
 )
+
+// Random returns a random name (for directory or file) based on 'pattern'.
+// For 'pattern' usage see [os.MkdirTemp].
+func Random(pattern string) (string, error) {
+	r, err := os.MkdirTemp("", pattern)
+	if err != nil {
+		return "", err
+	}
+	defer os.Remove(r)
+	return filepath.Base(r), nil
+}
 
 // NoExt returns 'path' without extension.
 // If 'path' has no extension or is empty, 'path' is returned.
