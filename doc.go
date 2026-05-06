@@ -1,2 +1,2 @@
-// Package filepathhelper contains [filepath] package helpers.
+// Package filepathhelper contains [path/filepath] package helpers.
 package filepathhelper

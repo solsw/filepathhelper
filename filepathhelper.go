@@ -1,26 +1,28 @@
 package filepathhelper
 
 import (
-	"os"
+	"math/rand"
 	"path/filepath"
+	"strings"
 
 	"github.com/solsw/pathhelper"
 )
 
-// Random returns a random name (for directory or file) based on 'pattern'.
-// For 'pattern' usage see [os.MkdirTemp].
-func Random(pattern string) (string, error) {
-	r, err := os.MkdirTemp("", pattern)
-	if err != nil {
-		return "", err
+// Random returns a random name (for directory or file).
+func Random() string {
+	const letters = "abcdefghijklmnopqrstuvwxyz0123456789"
+	const randLen = 10
+	b := make([]byte, randLen)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
 	}
-	defer os.Remove(r)
-	return filepath.Base(r), nil
+	return string(b)
 }
 
-// NoExt returns 'path' without extension.
+// WithoutExt returns 'path' without extension and corresponding dot.
+// If 'path' ends with dot, the dot is removed.
 // If 'path' has no extension or is empty, 'path' is returned.
-func NoExt(path string) string {
+func WithoutExt(path string) string {
 	if path == "" {
 		return ""
 	}
@@ -32,20 +34,20 @@ func NoExt(path string) string {
 }
 
 // ChangeExt changes extension of 'path' to 'ext'. 'ext' may or may not start with dot.
-// If 'path' or 'ext' is empty, 'path' is returned.
+// If 'path' or 'ext' is empty or 'ext' is ".", 'path' is returned.
 func ChangeExt(path, ext string) string {
 	if path == "" || ext == "" || ext == "." {
 		return path
 	}
-	if ext[0] == '.' {
-		return NoExt(path) + ext
+	if strings.HasPrefix(ext, ".") {
+		return WithoutExt(path) + ext
 	}
-	return NoExt(path) + "." + ext
+	return WithoutExt(path) + "." + ext
 }
 
 // Split splits 'path' (using [filepath.Separator] as separator)
 // into slice of strings containing directory names and filename.
-// (E.g. on Windows "a\b\c.d" is splitted into {"a", "b", "c.d"} slice.)
+// (E.g. on Windows "a\b\c.d" is split into {"a", "b", "c.d"} slice.)
 func Split(path string) []string {
 	return pathhelper.Split(filepath.ToSlash(path))
 }
@@ -56,7 +58,7 @@ func StartSeparator(path string) string {
 	if path == "" {
 		return ""
 	}
-	if path[0] == filepath.Separator {
+	if strings.HasPrefix(path, string(filepath.Separator)) {
 		return path
 	}
 	return string(filepath.Separator) + path
@@ -68,7 +70,7 @@ func EndSeparator(path string) string {
 	if path == "" {
 		return ""
 	}
-	if path[len(path)-1] == filepath.Separator {
+	if strings.HasSuffix(path, string(filepath.Separator)) {
 		return path
 	}
 	return path + string(filepath.Separator)

@@ -3,10 +3,21 @@ package filepathhelper
 import (
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 )
 
-func TestNoExt(t *testing.T) {
+func TestRandom(t *testing.T) {
+	got := Random()
+	if got == "" {
+		t.Fatal("Random() returned empty string")
+	}
+	if strings.ContainsRune(got, filepath.Separator) {
+		t.Errorf("Random() = %q, want base name without path separator", got)
+	}
+}
+
+func TestWithoutExt(t *testing.T) {
 	type args struct {
 		p string
 	}
@@ -58,8 +69,9 @@ func TestNoExt(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NoExt(filepath.FromSlash(tt.args.p)); got != filepath.FromSlash(tt.want) {
-				t.Errorf("NoExt() = %v, want %v", got, tt.want)
+			got := WithoutExt(filepath.FromSlash(tt.args.p))
+			if got != filepath.FromSlash(tt.want) {
+				t.Errorf("WithoutExt() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -110,7 +122,8 @@ func TestChangeExt(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ChangeExt(filepath.FromSlash(tt.args.p), tt.args.ext); got != filepath.FromSlash(tt.want) {
+			got := ChangeExt(filepath.FromSlash(tt.args.p), tt.args.ext)
+			if got != filepath.FromSlash(tt.want) {
 				t.Errorf("ChangeExt() = %v, want %v", got, tt.want)
 			}
 		})
@@ -184,7 +197,8 @@ func TestStartSeparator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := StartSeparator(filepath.FromSlash(tt.args.p)); got != filepath.FromSlash(tt.want) {
+			got := StartSeparator(filepath.FromSlash(tt.args.p))
+			if got != filepath.FromSlash(tt.want) {
 				t.Errorf("StartSeparator() = %v, want %v", got, tt.want)
 			}
 		})
@@ -215,7 +229,8 @@ func TestEndSeparator(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := EndSeparator(filepath.FromSlash(tt.args.p)); got != filepath.FromSlash(tt.want) {
+			got := EndSeparator(filepath.FromSlash(tt.args.p))
+			if got != filepath.FromSlash(tt.want) {
 				t.Errorf("EndSeparator() = %v, want %v", got, tt.want)
 			}
 		})
